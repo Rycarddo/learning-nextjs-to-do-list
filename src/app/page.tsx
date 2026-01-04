@@ -74,10 +74,10 @@ const Home = () => {
                     <DialogHeader>
                       <DialogTitle>Edit task</DialogTitle>
                     </DialogHeader>
-                    <DialogClose className="flex gap-2">
+                    <div className="flex gap-2">
                       <Input placeholder="Edit task" />
                       <Button className="cursor-pointer">Save</Button>
-                    </DialogClose>
+                    </div>
                   </DialogContent>
                 </Dialog>
                 <Trash2 className="cursor-pointer" />
