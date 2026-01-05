@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tasks {
+  id Int @id @default(autoincrement())
+  task String
+  done Boolean
+}
