@@ -32,6 +32,7 @@ import { DeleteTask } from "@/actions/delete-task";
 import { toast } from "sonner";
 import { UpdateTaskStatus } from "@/actions/toggle-done";
 import { FilterType } from "@/components/filter";
+import { DeleteCompletedTasks } from "@/actions/clear-completed-tasks";
 
 const Home = () => {
   type FilterType = "all" | "pending" | "done";
@@ -115,6 +116,12 @@ const Home = () => {
     }
   };
 
+  const clearCompletedTasks = async () => {
+    const deletedTasks = await DeleteCompletedTasks();
+    if (!deletedTasks) return;
+    handleGetTasks();
+  };
+
   useEffect(() => {
     handleGetTasks();
   }, []);
@@ -163,7 +170,7 @@ const Home = () => {
             setCurrentFilter={setCurrentFilter}
           />
           <div className="mt-4 border-b">
-            {taskList.length === 0 && (
+            {taskList.length === 0 && currentFilter === "all" && (
               <p className="text-xs my-4 pt-4 border-t">
                 You don't have tasks to do.
               </p>
@@ -229,22 +236,18 @@ const Home = () => {
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
-                    Are you absolutely sure that you want to delete x items?
+                    Are you absolutely sure that you want to delete{" "}
+                    {taskList.filter((task) => task.done === true).length}{" "}
+                    tasks?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     This action cannot be undone. This will permanently delete
-                    your tasks.
+                    your completed tasks.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() =>
-                      taskList
-                        .filter((task) => task.done === true)
-                        .forEach((task) => handleDeleteTask(task.id))
-                    }
-                  >
+                  <AlertDialogAction onClick={clearCompletedTasks}>
                     Yes
                   </AlertDialogAction>
                 </AlertDialogFooter>
